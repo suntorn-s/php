@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2021 at 05:02 AM
+-- Generation Time: Mar 09, 2021 at 05:21 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -42,7 +42,9 @@ CREATE TABLE IF NOT EXISTS `book` (
   `day_amount` int(2) DEFAULT NULL,
   `picture` mediumblob,
   `book_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`book_id`)
+  PRIMARY KEY (`book_id`),
+  KEY `status_id` (`status_id`),
+  KEY `type_id` (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
@@ -50,6 +52,45 @@ CREATE TABLE IF NOT EXISTS `book` (
 --
 
 TRUNCATE TABLE `book`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE IF NOT EXISTS `customer` (
+  `customer_id` varchar(4) COLLATE utf8mb4_bin NOT NULL,
+  `customer_name` varchar(30) COLLATE utf8mb4_bin NOT NULL,
+  `customer_surname` varchar(30) COLLATE utf8mb4_bin NOT NULL,
+  `customer_addr` varchar(60) COLLATE utf8mb4_bin DEFAULT NULL,
+  `customer_phone` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Truncate table before insert `customer`
+--
+
+TRUNCATE TABLE `customer`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statusbook`
+--
+
+DROP TABLE IF EXISTS `statusbook`;
+CREATE TABLE IF NOT EXISTS `statusbook` (
+  `status_id` varchar(2) COLLATE utf8mb4_bin NOT NULL,
+  `status_name` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+  PRIMARY KEY (`status_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Truncate table before insert `statusbook`
+--
+
+TRUNCATE TABLE `statusbook`;
 -- --------------------------------------------------------
 
 --
@@ -67,7 +108,18 @@ CREATE TABLE IF NOT EXISTS `typebook` (
 -- Truncate table before insert `typebook`
 --
 
-TRUNCATE TABLE `typebook`;COMMIT;
+TRUNCATE TABLE `typebook`;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `book`
+--
+ALTER TABLE `book`
+  ADD CONSTRAINT `book_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `typebook` (`type_id`),
+  ADD CONSTRAINT `book_ibfk_2` FOREIGN KEY (`status_id`) REFERENCES `statusbook` (`status_id`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
